@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5c4033">
+<meta name="description" content="Portal pessoal com busca, favoritos e vitrine de projetos.">
+<title>Portal Favoritos</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg-default:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);--bg-image:none;--brand:#5c4033;--brand-soft:#f0e4da;--text:#1f2937;--muted:#5b6472;--line:#d9dee7;--panel:rgba(255,255,255,.78);--danger:#b42318;--ok:#146c43}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background-color:#c3cfe2;background-image:var(--bg-image),var(--bg-default);background-size:cover;background-position:center;background-attachment:fixed;background-repeat:no-repeat}
+.wrap{width:min(100%,980px);margin:0 auto;padding:18px 16px 40px;display:grid;gap:18px}
+.panel{padding:18px;border-radius:20px;background:var(--panel);box-shadow:0 10px 30px rgba(31,41,55,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top h1{margin:0;color:var(--brand);font-size:clamp(22px,5vw,30px)}
+button,select,input{font:inherit}
+.icon-btn{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brand);cursor:pointer}
+.icon-btn svg{width:22px;height:22px}
+.search{display:grid;grid-template-columns:auto 1fr auto;gap:10px}
+.search select,.search input{min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);min-width:0}
+.search select{max-width:150px}
+.btn{min-height:48px;padding:0 20px;border:0;border-radius:12px;background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
+.btn.light{background:#fff;color:var(--brand);border:1px solid var(--line)}
+.btn.danger{background:#fff;color:var(--danger);border:1px solid #f0c8c4}
+.btn.small{min-height:38px;padding:0 14px;font-size:14px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.section-head h2{margin:0;font-size:19px;color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:14px}
+.tile{position:relative;display:grid;justify-items:center;gap:8px;padding:12px 6px;border:0;border-radius:16px;background:transparent;color:var(--text);text-decoration:none;cursor:pointer;text-align:center}
+.tile:hover,.tile:focus-visible{background:rgba(255,255,255,.7);outline:none}
+.tile .ico{width:60px;height:60px;border-radius:16px;background:#fff;box-shadow:0 4px 12px rgba(31,41,55,.15);object-fit:cover;display:grid;place-items:center;overflow:hidden}
+.tile .ico.letter{background:var(--brand);color:#fff;font-size:26px;font-weight:700}
+.tile span{max-width:100%;font-size:13px;line-height:1.25;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile.add .ico{background:transparent;border:2px dashed #8f9aad;box-shadow:none;color:#5b6472}
+.tile.add .ico svg{width:26px;height:26px}
+.editing .tile .ico{animation:wiggle .35s ease-in-out infinite alternate}
+.editing .tile.add{display:none}
+@keyframes wiggle{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+@media (prefers-reduced-motion:reduce){.editing .tile .ico{animation:none}}
+.empty{margin:0;color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.card{display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}
+.card-head{display:flex;align-items:center;gap:12px}
+.card-head .ico{width:56px;height:56px;flex:none;border-radius:14px;object-fit:cover;background:var(--brand-soft);display:grid;place-items:center;overflow:hidden}
+.card-head .ico.letter{background:var(--brand);color:#fff;font-size:24px;font-weight:700}
+.card h3{margin:0;font-size:17px}
+.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.badge{padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:700}
+.badge.ok{background:#dff3e8;color:var(--ok)}
+.card .btn{display:grid;place-items:center;text-decoration:none;text-align:center}
+dialog{width:min(92vw,460px);padding:0;border:0;border-radius:20px;background:#fff;color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(15,23,42,.5)}
+.dlg{display:grid;gap:14px;padding:22px}
+.dlg h2{margin:0;color:var(--brand);font-size:20px}
+.dlg h3{margin:6px 0 0;font-size:15px;color:var(--brand)}
+.field{display:grid;gap:6px}
+.field label{font-size:14px;font-weight:700}
+.field input[type=text],.field input[type=url]{min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.field input[type=file]{font-size:14px}
+.hint{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.row .btn{flex:1 1 130px}
+.preview{display:flex;align-items:center;gap:12px}
+.preview .ico{width:56px;height:56px;border-radius:14px;object-fit:cover;background:var(--brand-soft);display:grid;place-items:center;overflow:hidden}
+.preview .ico.letter{background:var(--brand);color:#fff;font-size:24px;font-weight:700}
+.status{min-height:18px;margin:0;font-size:13px;color:var(--muted)}
+.status.bad{color:var(--danger)}
+.status.good{color:var(--ok)}
+hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
+[hidden]{display:none!important}
+@media (max-width:520px){.search{grid-template-columns:1fr auto}.search select{grid-column:1 / -1;max-width:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="panel top">
+<h1 id="siteTitle">Portal Favoritos</h1>
+<button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
+</header>
+
+<form class="panel search" id="searchForm" role="search">
+<select id="searchEngine" aria-label="Motor de busca"></select>
+<input id="searchQuery" type="search" placeholder="Pesquisar..." autocomplete="off" aria-label="Pesquisar">
+<button class="btn" type="submit">Buscar</button>
+</form>
+
+<section class="panel" id="favSection">
+<div class="section-head">
+<h2>Favoritos</h2>
+<button class="btn light small" id="toggleEdit" type="button">Editar</button>
+</div>
+<div class="grid" id="favGrid"></div>
+<p class="empty" id="favEmpty" hidden>Nenhum favorito ainda. Toque em Adicionar para criar o primeiro.</p>
+</section>
+
+<section class="panel" id="showcase">
+<div class="section-head"><h2>Projetos</h2></div>
+<div class="cards" id="cards"></div>
+<p class="empty" id="cardsEmpty" hidden></p>
+</section>
+</div>
+
+<dialog id="favDialog">
+<form class="dlg" id="favForm" method="dialog">
+<h2 id="favTitle">Novo favorito</h2>
+<div class="field"><label for="favName">Nome</label><input id="favName" type="text" maxlength="40" autocomplete="off" required></div>
+<div class="field"><label for="favUrl">Link</label><input id="favUrl" type="text" inputmode="url" autocomplete="off" placeholder="exemplo.com.br" required></div>
+<div class="field"><label for="favImage">Imagem (opcional)</label><input id="favImage" type="text" inputmode="url" autocomplete="off" placeholder="Link de uma imagem"><input id="favFile" type="file" accept="image/*"><p class="hint">Sem imagem, o ícone do próprio site é usado.</p></div>
+<div class="preview"><div id="favPreview"></div><p class="hint" id="favPreviewHint">Pré-visualização</p></div>
+<p class="status" id="favStatus" role="status"></p>
+<div class="row">
+<button class="btn" type="submit" id="favSave">Salvar</button>
+<button class="btn light" type="button" id="favCancel">Cancelar</button>
+<button class="btn danger" type="button" id="favDelete" hidden>Excluir</button>
+</div>
+</form>
+</dialog>
+
+<dialog id="setDialog">
+<div class="dlg">
+<h2>Configurações</h2>
+<h3>Fundo da página</h3>
+<div class="field"><label for="bgUrl">Link de uma imagem</label><input id="bgUrl" type="text" inputmode="url" autocomplete="off" placeholder="https://..."></div>
+<div class="row"><button class="btn" type="button" id="bgApply">Aplicar link</button></div>
+<div class="field"><label for="bgFile">Ou escolha uma imagem do aparelho</label><input id="bgFile" type="file" accept="image/*"></div>
+<div class="row"><button class="btn light" type="button" id="bgReset">Voltar ao fundo padrão</button></div>
+<p class="status" id="bgStatus" role="status"></p>
+<hr>
+<h3>Backup das preferências</h3>
+<p class="hint">Salva favoritos, motor de busca e link do fundo em um arquivo, para levar a outro aparelho.</p>
+<div class="row"><button class="btn light" type="button" id="exportBtn">Exportar</button><button class="btn light" type="button" id="importBtn">Importar</button></div>
+<input id="importFile" type="file" accept="application/json,.json" hidden>
+<p class="status" id="backupStatus" role="status"></p>
+<hr>
+<div class="row"><button class="btn light" type="button" id="installBtn" hidden>Instalar aplicativo</button><button class="btn" type="button" id="setClose">Fechar</button></div>
+</div>
+</dialog>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const KEY_ENGINE='motor_busca_padrao',KEY_FAVS='user_favorites',KEY_BG='fundo_usuario';
+const ENGINES=[
+{nome:'Google',url:'https://www.google.com/search?q='},
+{nome:'Bing',url:'https://www.bing.com/search?q='},
+{nome:'DuckDuckGo',url:'https://duckduckgo.com/?q='},
+{nome:'Brave',url:'https://search.brave.com/search?q='},
+{nome:'Yahoo',url:'https://search.yahoo.com/search?p='},
+{nome:'Ecosia',url:'https://www.ecosia.org/search?q='}
+];
+const root=document.documentElement;
+
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+
+function normalizeUrl(value){
+let v=String(value||'').trim();
+if(!v)return null;
+if(!/^https?:\/\//i.test(v))v='https://'+v;
+try{
+const u=new URL(v);
+if(u.protocol!=='http:'&&u.protocol!=='https:')return null;
+if(!u.hostname.includes('.')&&u.hostname!=='localhost')return null;
+return u.href
+}catch(e){return null}
+}
+function favicon(url){
+try{return 'https://www.google.com/s2/favicons?domain='+new URL(url).hostname+'&sz=64'}catch(e){return ''}
+}
+function letterIcon(name,cls){
+const d=document.createElement('div');
+d.className=cls+' letter';
+d.textContent=(String(name||'?').trim().charAt(0)||'?').toUpperCase();
+return d
+}
+function makeIcon(name,custom,url,cls){
+const sources=[];
+if(custom)sources.push(custom);
+const f=favicon(url);
+if(f)sources.push(f);
+if(!sources.length)return letterIcon(name,cls);
+const img=document.createElement('img');
+img.className=cls;
+img.alt='';
+img.loading='lazy';
+img.referrerPolicy='no-referrer';
+let i=0;
+img.src=sources[0];
+img.addEventListener('error',()=>{
+i+=1;
+if(i<sources.length)img.src=sources[i];
+else img.replaceWith(letterIcon(name,cls))
+});
+return img
+}
+
+function setupEngines(){
+const sel=$('searchEngine');
+ENGINES.forEach(e=>{const o=document.createElement('option');o.value=e.url;o.textContent=e.nome;sel.appendChild(o)});
+const saved=lsGet(KEY_ENGINE);
+if(saved&&ENGINES.some(e=>e.url===saved))sel.value=saved;
+sel.addEventListener('change',()=>lsSet(KEY_ENGINE,sel.value));
+$('searchForm').addEventListener('submit',e=>{
+e.preventDefault();
+const q=$('searchQuery').value.trim();
+if(!q)return;
+const base=lsGet(KEY_ENGINE)||sel.value||ENGINES[0].url;
+window.open(base+encodeURIComponent(q),'_blank','noopener')
+})
+}
+
+let favs=[];
+let editing=false;
+let editId=null;
+let pendingImage='';
+
+function loadFavs(){
+let list=[];
+try{list=JSON.parse(lsGet(KEY_FAVS)||'[]')}catch(e){list=[]}
+favs=Array.isArray(list)?list.filter(f=>f&&typeof f.nome==='string'&&typeof f.url==='string'):[]
+}
+function saveFavs(){return lsSet(KEY_FAVS,JSON.stringify(favs))}
+
+function renderFavs(){
+const grid=$('favGrid');
+grid.textContent='';
+grid.classList.toggle('editing',editing);
+favs.forEach(f=>{
+const a=document.createElement('a');
+a.className='tile';
+a.href=f.url;
+a.target='_blank';
+a.rel='noopener';
+a.appendChild(makeIcon(f.nome,f.imagem,f.url,'ico'));
+const s=document.createElement('span');
+s.textContent=f.nome;
+a.appendChild(s);
+a.addEventListener('click',ev=>{if(editing){ev.preventDefault();openFav(f.id)}});
+grid.appendChild(a)
+});
+const add=document.createElement('button');
+add.type='button';
+add.className='tile add';
+add.innerHTML='<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div><span>Adicionar</span>';
+add.addEventListener('click',()=>openFav(null));
+grid.appendChild(add);
+$('favEmpty').hidden=favs.length>0;
+$('toggleEdit').hidden=favs.length===0&&!editing;
+$('toggleEdit').textContent=editing?'Concluir':'Editar'
+}
+
+function refreshPreview(){
+const box=$('favPreview');
+const name=$('favName').value||'?';
+const url=normalizeUrl($('favUrl').value)||'';
+const custom=pendingImage||$('favImage').value.trim();
+box.textContent='';
+box.appendChild(makeIcon(name,custom,url,'ico'))
+}
+function openFav(id){
+editId=id;
+pendingImage='';
+const f=id?favs.find(x=>x.id===id):null;
+$('favTitle').textContent=f?'Editar favorito':'Novo favorito';
+$('favName').value=f?f.nome:'';
+$('favUrl').value=f?f.url:'';
+$('favImage').value=f&&f.imagem&&!f.imagem.startsWith('data:')?f.imagem:'';
+if(f&&f.imagem&&f.imagem.startsWith('data:'))pendingImage=f.imagem;
+$('favFile').value='';
+$('favDelete').hidden=!f;
+$('favStatus').textContent='';
+$('favStatus').className='status';
+refreshPreview();
+$('favDialog').showModal()
+}
+function readImage(file,max,quality){
+return new Promise((resolve,reject)=>{
+const fr=new FileReader();
+fr.onerror=()=>reject(new Error('read'));
+fr.onload=()=>{
+const img=new Image();
+img.onerror=()=>reject(new Error('decode'));
+img.onload=()=>{
+const scale=Math.min(1,max/Math.max(img.width,img.height));
+const w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+const c=document.createElement('canvas');
+c.width=w;c.height=h;
+c.getContext('2d').drawImage(img,0,0,w,h);
+c.toBlob(b=>b?resolve(b):reject(new Error('blob')),'image/jpeg',quality)
+};
+img.src=fr.result
+};
+fr.readAsDataURL(file)
+})
+}
+function blobToDataUrl(blob){
+return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=()=>reject(new Error('read'));fr.readAsDataURL(blob)})
+}
+
+function setupFavDialog(){
+$('toggleEdit').addEventListener('click',()=>{editing=!editing;renderFavs()});
+['favName','favUrl','favImage'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='favImage'&&$('favImage').value.trim())pendingImage='';refreshPreview()}));
+$('favFile').addEventListener('change',async()=>{
+const file=$('favFile').files[0];
+if(!file)return;
+try{
+const blob=await readImage(file,128,.85);
+pendingImage=await blobToDataUrl(blob);
+$('favImage').value='';
+refreshPreview()
+}catch(e){
+$('favStatus').textContent='Não foi possível ler essa imagem.';
+$('favStatus').className='status bad'
+}
+});
+$('favCancel').addEventListener('click',()=>$('favDialog').close());
+$('favDelete').addEventListener('click',()=>{
+if(!editId)return;
+favs=favs.filter(f=>f.id!==editId);
+saveFavs();
+$('favDialog').close();
+renderFavs()
+});
+$('favForm').addEventListener('submit',e=>{
+e.preventDefault();
+const nome=$('favName').value.trim();
+const url=normalizeUrl($('favUrl').value);
+if(!nome||!url){
+$('favStatus').textContent='Informe um nome e um link válido.';
+$('favStatus').className='status bad';
+return
+}
+let imagem=pendingImage;
+if(!imagem){
+const typed=$('favImage').value.trim();
+if(typed){
+const n=normalizeUrl(typed);
+if(!n){$('favStatus').textContent='O link da imagem não é válido.';$('favStatus').className='status bad';return}
+imagem=n
+}
+}
+if(editId){
+const f=favs.find(x=>x.id===editId);
+if(f){f.nome=nome;f.url=url;f.imagem=imagem}
+}else{
+favs.push({id:Date.now(),nome,url,imagem})
+}
+if(!saveFavs()){
+$('favStatus').textContent='Não foi possível salvar. O armazenamento do navegador está cheio ou bloqueado.';
+$('favStatus').className='status bad';
+return
+}
+$('favDialog').close();
+renderFavs()
+})
+}
+
+const DB_NAME='portal-db',DB_STORE='arquivos';
+function openDb(){
+return new Promise((resolve,reject)=>{
+if(!window.indexedDB)return reject(new Error('idb'));
+const r=indexedDB.open(DB_NAME,1);
+r.onupgradeneeded=()=>r.result.createObjectStore(DB_STORE);
+r.onsuccess=()=>resolve(r.result);
+r.onerror=()=>reject(r.error)
+})
+}
+async function dbGet(key){
+const db=await openDb();
+return new Promise((resolve,reject)=>{const t=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(key);t.onsuccess=()=>resolve(t.result);t.onerror=()=>reject(t.error)})
+}
+async function dbPut(key,val){
+const db=await openDb();
+return new Promise((resolve,reject)=>{const t=db.transaction(DB_STORE,'readwrite');t.objectStore(DB_STORE).put(val,key);t.oncomplete=()=>resolve();t.onerror=()=>reject(t.error)})
+}
+async function dbDel(key){
+const db=await openDb();
+return new Promise((resolve,reject)=>{const t=db.transaction(DB_STORE,'readwrite');t.objectStore(DB_STORE).delete(key);t.oncomplete=()=>resolve();t.onerror=()=>reject(t.error)})
+}
+
+let bgObjectUrl=null;
+function cssUrl(u){return 'url("'+String(u).replace(/["\\\n\r]/g,'')+'")'}
+function applyBg(url){
+if(bgObjectUrl&&bgObjectUrl!==url){URL.revokeObjectURL(bgObjectUrl);bgObjectUrl=null}
+root.style.setProperty('--bg-image',url?cssUrl(url):'none')
+}
+async function loadBg(){
+try{
+const blob=await dbGet('fundo');
+if(blob){bgObjectUrl=URL.createObjectURL(blob);applyBg(bgObjectUrl);return}
+}catch(e){}
+const saved=lsGet(KEY_BG);
+if(saved)applyBg(saved)
+}
+function bgSay(text,cls){$('bgStatus').textContent=text;$('bgStatus').className='status '+(cls||'')}
+function backupSay(text,cls){$('backupStatus').textContent=text;$('backupStatus').className='status '+(cls||'')}
+
+function setupSettings(){
+const dlg=$('setDialog');
+$('openSettings').addEventListener('click',()=>{
+$('bgUrl').value=lsGet(KEY_BG)||'';
+bgSay('');backupSay('');
+dlg.showModal()
+});
+$('setClose').addEventListener('click',()=>dlg.close());
+$('bgApply').addEventListener('click',async()=>{
+const raw=$('bgUrl').value.trim();
+if(!raw){bgSay('Cole o link de uma imagem.','bad');return}
+const u=normalizeUrl(raw);
+if(!u){bgSay('O link não é válido.','bad');return}
+try{await dbDel('fundo')}catch(e){}
+if(!lsSet(KEY_BG,u)){bgSay('Não foi possível salvar o fundo.','bad');return}
+applyBg(u);
+bgSay('Fundo aplicado.','good')
+});
+$('bgFile').addEventListener('change',async()=>{
+const file=$('bgFile').files[0];
+if(!file)return;
+try{
+const blob=await readImage(file,1920,.85);
+await dbPut('fundo',blob);
+lsDel(KEY_BG);
+$('bgUrl').value='';
+if(bgObjectUrl)URL.revokeObjectURL(bgObjectUrl);
+bgObjectUrl=URL.createObjectURL(blob);
+applyBg(bgObjectUrl);
+bgSay('Fundo aplicado.','good')
+}catch(e){bgSay('Não foi possível usar essa imagem.','bad')}
+$('bgFile').value=''
+});
+$('bgReset').addEventListener('click',async()=>{
+try{await dbDel('fundo')}catch(e){}
+lsDel(KEY_BG);
+$('bgUrl').value='';
+applyBg('');
+bgSay('Fundo padrão restaurado.','good')
+});
+$('exportBtn').addEventListener('click',()=>{
+const data={versao:1,motor:lsGet(KEY_ENGINE)||'',fundo:lsGet(KEY_BG)||'',favoritos:favs};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='portal-backup.json';
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+backupSay('Arquivo gerado.','good')
+});
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',async()=>{
+const file=$('importFile').files[0];
+$('importFile').value='';
+if(!file)return;
+try{
+const data=JSON.parse(await file.text());
+if(!data||!Array.isArray(data.favoritos))throw new Error('format');
+const clean=[];
+data.favoritos.forEach((f,i)=>{
+if(!f||typeof f.nome!=='string')return;
+const url=normalizeUrl(f.url);
+if(!url)return;
+let img='';
+if(typeof f.imagem==='string'&&f.imagem){img=f.imagem.startsWith('data:image/')?f.imagem:(normalizeUrl(f.imagem)||'')}
+clean.push({id:Date.now()+i,nome:f.nome.slice(0,40),url,imagem:img})
+});
+favs=clean;
+saveFavs();
+if(typeof data.motor==='string'&&ENGINES.some(e=>e.url===data.motor)){lsSet(KEY_ENGINE,data.motor);$('searchEngine').value=data.motor}
+if(typeof data.fundo==='string'&&data.fundo){const u=normalizeUrl(data.fundo);if(u){lsSet(KEY_BG,u);try{await dbDel('fundo')}catch(e){}applyBg(u)}}
+renderFavs();
+backupSay('Preferências importadas.','good')
+}catch(e){backupSay('Arquivo de backup inválido.','bad')}
+})
+}
+
+let installEvent=null;
+window.addEventListener('beforeinstallprompt',e=>{
+e.preventDefault();
+installEvent=e;
+$('installBtn').hidden=false
+});
+window.addEventListener('appinstalled',()=>{installEvent=null;$('installBtn').hidden=true});
+$('installBtn').addEventListener('click',async()=>{
+if(!installEvent)return;
+installEvent.prompt();
+try{await installEvent.userChoice}catch(e){}
+installEvent=null;
+$('installBtn').hidden=true
+});
+
+function fmtMoney(v){
+try{return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v)}catch(e){return 'R$ '+v}
+}
+function badge(text,cls){
+const b=document.createElement('span');
+b.className='badge'+(cls?' '+cls:'');
+b.textContent=text;
+return b
+}
+function renderCards(list){
+const box=$('cards');
+box.textContent='';
+const items=Array.isArray(list)?list:[];
+$('cardsEmpty').hidden=items.length>0;
+if(!items.length)$('cardsEmpty').textContent='Nenhum projeto cadastrado ainda.';
+items.forEach(p=>{
+if(!p||!p.nome)return;
+const link=normalizeUrl(p.link);
+if(!link)return;
+const card=document.createElement('article');
+card.className='card';
+const head=document.createElement('div');
+head.className='card-head';
+const imgUrl=p.imagem?(normalizeUrl(p.imagem)||''):'';
+head.appendChild(makeIcon(p.nome,imgUrl,link,'ico'));
+const titles=document.createElement('div');
+const h=document.createElement('h3');
+h.textContent=p.nome;
+titles.appendChild(h);
+const bs=document.createElement('div');
+bs.className='badges';
+if(p.acesso==='gratis')bs.appendChild(badge('Gratuito','ok'));
+else{
+const dias=Number(p.gratisDias)||0;
+if(dias>0)bs.appendChild(badge(dias+(dias===1?' dia grátis':' dias grátis'),'ok'));
+const preco=Number(p.preco);
+if(preco>0)bs.appendChild(badge((dias>0?'Depois ':'')+fmtMoney(preco)+(p.periodo?' por '+p.periodo:'')))
+}
+titles.appendChild(bs);
+head.appendChild(titles);
+card.appendChild(head);
+const d=document.createElement('p');
+d.textContent=p.descricao||'';
+card.appendChild(d);
+const a=document.createElement('a');
+a.className='btn';
+a.href=link;
+a.target='_blank';
+a.rel='noopener';
+a.textContent='Abrir projeto';
+card.appendChild(a);
+box.appendChild(card)
+})
+}
+async function loadShowcase(){
+try{
+const r=await fetch('projetos.json',{cache:'no-store'});
+if(!r.ok)throw new Error('http');
+const data=await r.json();
+if(data&&typeof data.titulo==='string'&&data.titulo.trim()){
+$('siteTitle').textContent=data.titulo.trim();
+document.title=data.titulo.trim()
+}
+renderCards(data&&data.projetos)
+}catch(e){
+$('cardsEmpty').hidden=false;
+$('cardsEmpty').textContent='Não foi possível carregar os projetos agora.'
+}
+}
+
+function setupUpdates(){
+if(!('serviceWorker' in navigator))return;
+const had=!!navigator.serviceWorker.controller;
+let reloading=false;
+navigator.serviceWorker.addEventListener('controllerchange',()=>{
+if(!had||reloading)return;
+reloading=true;
+const go=()=>{
+if(document.querySelector('dialog[open]')){setTimeout(go,3000);return}
+location.reload()
+};
+go()
+});
+navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>{
+const check=()=>{reg.update().catch(()=>{})};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)check()});
+window.addEventListener('online',check);
+setInterval(check,300000)
+}).catch(()=>{});
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{})
+}
+
+setupEngines();
+loadFavs();
+renderFavs();
+setupFavDialog();
+setupSettings();
+loadBg();
+loadShowcase();
+setupUpdates()
+})();
+</script>
+</body>
+</html>

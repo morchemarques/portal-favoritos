@@ -1,0 +1,15 @@
+{
+  "titulo": "Portal Favoritos",
+  "projetos": [
+    {
+      "nome": "RotaDireta GPS",
+      "descricao": "Rotas de entrega com roteirização por IA, correção de endereço no mapa e navegação no Google Maps, Waze ou HERE WeGo.",
+      "link": "https://rotadiretagps.github.io/rotadireta-gps/",
+      "imagem": "https://rotadiretagps.github.io/rotadireta-gps/icon-192.png",
+      "acesso": "pago",
+      "gratisDias": 7,
+      "preco": 25,
+      "periodo": "mês"
+    }
+  ]
+}
