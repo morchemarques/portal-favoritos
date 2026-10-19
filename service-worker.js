@@ -1,5 +1,5 @@
-const CACHE='portal-v1';
-const SHELL=['./','./index.html','./projetos.json','./manifest.json','./icon.svg','./icon-192.png','./icon-512.png','./icon-512-maskable.png'];
+const CACHE='portal-v3';
+const SHELL=['./','./index.html','./projetos.json','./manifest.json','./icon.svg','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./bg-parede.jpg','./bg-parede-mini.jpg','./bg-noite.jpg','./bg-noite-mini.jpg','./bg-entardecer.jpg','./bg-entardecer-mini.jpg','./bg-ondas.jpg','./bg-ondas-mini.jpg'];
 self.addEventListener('install',event=>{
 self.skipWaiting();
 event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(SHELL.map(url=>fetch(new Request(url,{cache:'reload'})).then(r=>r.ok?cache.put(url,r):null).catch(()=>null)))))
