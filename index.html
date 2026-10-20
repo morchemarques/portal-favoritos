@@ -16,15 +16,26 @@ html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background-color:#c3cfe2;background-image:var(--bg-image),var(--bg-default);background-size:cover;background-position:center;background-attachment:fixed;background-repeat:no-repeat}
 .wrap{width:min(100%,980px);margin:0 auto;padding:18px 16px 40px;display:grid;gap:18px}
 .panel{padding:18px;border-radius:20px;background:var(--panel);box-shadow:0 10px 30px rgba(31,41,55,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.top{display:grid;gap:14px}
+.top{position:relative;display:grid;gap:16px;padding:22px 20px;overflow:hidden;color:#fff;background:radial-gradient(circle at 92% -10%,rgba(240,176,80,.55) 0,rgba(240,176,80,0) 45%),radial-gradient(circle at -5% 120%,rgba(255,255,255,.18) 0,rgba(255,255,255,0) 50%),linear-gradient(135deg,#2e1f18 0%,#5c4033 55%,#8a5a3c 100%);border:1px solid rgba(255,255,255,.18);box-shadow:0 16px 40px rgba(46,31,24,.45),inset 0 1px 0 rgba(255,255,255,.2)}
+.top::after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 22px rgba(255,255,255,.04),0 0 0 44px rgba(255,255,255,.03);pointer-events:none}
+.top>*{position:relative;z-index:1}
 .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#f7c873,#d98e2b);color:#3b2a21;box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.55)}
+.logo svg{width:28px;height:28px}
+.brand-text{min-width:0}
+.sub{margin:3px 0 0;color:rgba(255,255,255,.78);font-size:13px;line-height:1.35}
 .actions{display:flex;flex-wrap:wrap;gap:8px}
-.pill{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--brand);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer}
+.pill{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .15s ease,background .15s ease}
+.pill:hover,.pill:focus-visible{background:rgba(255,255,255,.26);transform:translateY(-1px);outline:none}
 .pill svg{width:18px;height:18px;flex:none}
-.pill.main{background:var(--brand);border-color:var(--brand);color:#fff}
-.top h1{margin:0;color:var(--brand);font-size:clamp(22px,5vw,30px)}
+.pill.main{background:linear-gradient(145deg,#f7c873,#d98e2b);border-color:transparent;color:#3b2a21;box-shadow:0 6px 16px rgba(217,142,43,.4)}
+.pill.main:hover,.pill.main:focus-visible{background:linear-gradient(145deg,#fbd488,#e39a35)}
+.top h1{margin:0;color:#fff;font-size:clamp(24px,6vw,32px);font-weight:800;letter-spacing:-.4px;line-height:1.1;text-shadow:0 2px 8px rgba(0,0,0,.3)}
 button,select,input{font:inherit}
-.icon-btn{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brand);cursor:pointer}
+.icon-btn{display:grid;place-items:center;flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--brand);cursor:pointer}
+.top .icon-btn{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.14);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.top .icon-btn:hover,.top .icon-btn:focus-visible{background:rgba(255,255,255,.26);outline:none}
 .icon-btn svg{width:22px;height:22px}
 .search{display:grid;grid-template-columns:auto 1fr auto;gap:10px}
 .search select,.search input{min-height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--text);min-width:0}
@@ -82,6 +93,18 @@ dialog::backdrop{background:rgba(15,23,42,.5)}
 .preset.default{background-image:var(--bg-default);color:#1f2937;text-shadow:none}
 .preset.active{border-color:var(--brand);outline-color:var(--brand)}
 .featured{border:2px solid var(--brand)}
+.fav-panel{position:relative;padding:20px 18px 22px;border:2px solid #e3a444;background:linear-gradient(160deg,rgba(255,250,240,.96) 0%,rgba(253,236,205,.92) 100%);box-shadow:0 14px 36px rgba(217,142,43,.35),0 0 0 5px rgba(247,200,115,.28)}
+.fav-panel::before{content:"";position:absolute;left:18px;right:18px;top:-2px;height:5px;border-radius:0 0 6px 6px;background:linear-gradient(90deg,#f7c873,#d98e2b,#f7c873)}
+.fav-title{display:flex;align-items:center;gap:10px}
+.fav-title .star{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(145deg,#f7c873,#d98e2b);color:#3b2a21;box-shadow:0 4px 10px rgba(217,142,43,.4)}
+.fav-title .star svg{width:20px;height:20px}
+.fav-panel .section-head h2{font-size:22px;font-weight:800;color:#3b2a21}
+.fav-panel .btn.light{border-color:#e3a444;color:#7a4a12;background:#fffaf0}
+.fav-panel .tile{background:rgba(255,255,255,.7);border:1px solid rgba(227,164,68,.35);box-shadow:0 3px 10px rgba(217,142,43,.15)}
+.fav-panel .tile:hover,.fav-panel .tile:focus-visible{background:#fff;border-color:#d98e2b}
+.fav-panel .tile.add{background:transparent;border:2px dashed #d9a85c;box-shadow:none}
+.fav-panel .tile.add .ico{border-color:#d98e2b;color:#9a5d12}
+.fav-panel .empty{color:#7a4a12}
 .featured .card{border-color:var(--brand-soft);background:#fffaf5}
 .featured .card .btn{min-height:52px;font-size:17px}
 .dlg>*,.sync-box>*{min-width:0}
@@ -113,7 +136,10 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <div class="wrap">
 <header class="panel top">
 <div class="top-row">
-<h1 id="siteTitle">Portal Favoritos</h1>
+<div class="brand">
+<span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.2"/><rect x="13" y="3" width="8" height="8" rx="2.2" opacity=".6"/><rect x="3" y="13" width="8" height="8" rx="2.2" opacity=".6"/><rect x="13" y="13" width="8" height="8" rx="2.2"/></svg></span>
+<div class="brand-text"><h1 id="siteTitle">Portal Favoritos</h1><p class="sub">Busca, favoritos e projetos em um só lugar</p></div>
+</div>
 <button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
 </div>
 <div class="actions">
@@ -134,9 +160,9 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <button class="btn" type="submit">Buscar</button>
 </form>
 
-<section class="panel" id="favSection">
+<section class="panel fav-panel" id="favSection">
 <div class="section-head">
-<h2>Favoritos</h2>
+<div class="fav-title"><span class="star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8Z"/></svg></span><h2>Favoritos</h2></div>
 <div class="row"><button class="btn light small" id="openSync" type="button">Sincronizar</button><button class="btn light small" id="toggleEdit" type="button">Editar</button></div>
 </div>
 <div class="grid" id="favGrid"></div>
@@ -786,11 +812,10 @@ if(main){
 feat.appendChild(buildCard(main,normalizeUrl(main.link)));
 $('featured').hidden=false
 }
-const rest=items.filter(p=>p!==main);
-$('showcase').hidden=rest.length===0&&!!main;
+$('showcase').hidden=items.length===0;
 $('cardsEmpty').hidden=items.length>0;
 if(!items.length)$('cardsEmpty').textContent='Nenhum projeto cadastrado ainda.';
-rest.forEach(p=>box.appendChild(buildCard(p,normalizeUrl(p.link))))
+items.forEach(p=>box.appendChild(buildCard(p,normalizeUrl(p.link))))
 }
 async function loadShowcase(){
 try{
