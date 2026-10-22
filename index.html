@@ -170,7 +170,7 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 </section>
 
 <section class="panel" id="showcase">
-<div class="section-head"><h2>Projetos</h2></div>
+<div class="section-head"><h2>Nossos Projetos</h2></div>
 <div class="cards" id="cards"></div>
 <p class="empty" id="cardsEmpty" hidden></p>
 </section>
@@ -217,7 +217,7 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <h3>Fundo da página</h3>
 <p>Nas Configurações há quatro fundos prontos e o fundo padrão. Você também pode usar uma imagem sua, colando o link ou escolhendo um arquivo do aparelho.</p>
 <h3>Projetos e acesso principal</h3>
-<p>No topo fica o acesso principal. Abaixo, a vitrine mostra os projetos disponíveis, com descrição, tempo de uso gratuito e valor depois do período de teste. Toque em Abrir projeto para acessar.</p>
+<p>A vitrine Nossos Projetos mostra os projetos disponíveis, cada um com descrição e botão de acesso. Toque no botão do projeto para abrir.</p>
 <h3>Sincronizar aparelhos</h3>
 <p>No botão Sincronizar, dos Favoritos, você une a lista de favoritos de dois aparelhos sem criar conta. Por código: gere um código de 6 dígitos em um aparelho e digite no outro. Pela rede Wi-Fi: abra a opção nos dois aparelhos que estão na mesma rede e aprove o pedido. Os favoritos dos dois aparelhos são somados, sem apagar nenhum.</p>
 <h3>Backup</h3>
@@ -770,7 +770,7 @@ const card=document.createElement('article');
 card.className='card';
 const head=document.createElement('div');
 head.className='card-head';
-const imgUrl=p.imagem?(normalizeUrl(p.imagem)||''):'';
+const imgUrl=p.imagem?(/^https?:\/\//i.test(String(p.imagem).trim())?(normalizeUrl(p.imagem)||''):String(p.imagem).trim()):'';
 head.appendChild(makeIcon(p.nome,imgUrl,link,'ico'));
 const titles=document.createElement('div');
 const h=document.createElement('h3');
