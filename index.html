@@ -812,10 +812,11 @@ if(main){
 feat.appendChild(buildCard(main,normalizeUrl(main.link)));
 $('featured').hidden=false
 }
-$('showcase').hidden=items.length===0;
-$('cardsEmpty').hidden=items.length>0;
-if(!items.length)$('cardsEmpty').textContent='Nenhum projeto cadastrado ainda.';
-items.forEach(p=>box.appendChild(buildCard(p,normalizeUrl(p.link))))
+const rest=items.filter(p=>p!==main);
+$('showcase').hidden=rest.length===0;
+$('cardsEmpty').hidden=rest.length>0;
+if(!rest.length)$('cardsEmpty').textContent='Nenhum projeto cadastrado ainda.';
+rest.forEach(p=>box.appendChild(buildCard(p,normalizeUrl(p.link))))
 }
 async function loadShowcase(){
 try{
