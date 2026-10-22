@@ -145,6 +145,7 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <div class="actions">
 <button class="pill main" id="openHelp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17.5h.01"/></svg>Como funciona</button>
 <a class="pill" href="https://chat.whatsapp.com/DR6neHKT1fWGXwQNA3djJ0?s=cl&amp;p=a&amp;mlu=4&amp;iam=2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.2L2 22l4.9-1.2A11 11 0 0 0 20.5 3.5Z"/><path d="M9 8.2c0 3.6 3 6.6 6.6 6.6l1.4-1.6-2.3-1.2-1 .9a4.2 4.2 0 0 1-2.4-2.4l.9-1L10.5 7.3Z"/></svg>Grupo no WhatsApp</a>
+<button class="pill main" id="shareBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Compartilhar</button>
 <a class="pill" href="mailto:morchemarques@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a>
 </div>
 </header>
@@ -1144,6 +1145,24 @@ $('visitLine').hidden=false
 }catch(e){$('visitLine').hidden=true}
 }
 
+
+function setupShare(){
+const btn=$('shareBtn');
+if(!btn)return;
+btn.addEventListener('click',async()=>{
+const url=location.origin+location.pathname;
+const data={title:'Portal Favoritos',text:'Conheça o Portal Favoritos: busca, favoritos e projetos em um só lugar.',url};
+if(navigator.share){
+try{await navigator.share(data)}catch(e){}
+return
+}
+try{
+await navigator.clipboard.writeText(url);
+btn.lastChild.textContent='Link copiado!';
+setTimeout(()=>{btn.lastChild.textContent='Compartilhar'},2000)
+}catch(e){window.prompt('Copie o link:',url)}
+})
+}
 function setupFooter(){
 $('openTerms').addEventListener('click',()=>$('termsDialog').showModal());
 $('termsClose').addEventListener('click',()=>$('termsDialog').close());
@@ -1181,7 +1200,7 @@ setupSettings();
 loadBg();
 loadShowcase();
 setupSync();
-setupFooter();
+setupFooter();setupShare();
 loadCounter();
 setupUpdates()
 })();
