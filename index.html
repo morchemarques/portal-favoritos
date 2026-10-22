@@ -19,7 +19,7 @@ body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,-apple-sy
 .top{position:relative;display:grid;gap:16px;padding:22px 20px;overflow:hidden;color:#fff;background:radial-gradient(circle at 92% -10%,rgba(240,176,80,.55) 0,rgba(240,176,80,0) 45%),radial-gradient(circle at -5% 120%,rgba(255,255,255,.18) 0,rgba(255,255,255,0) 50%),linear-gradient(135deg,#2e1f18 0%,#5c4033 55%,#8a5a3c 100%);border:1px solid rgba(255,255,255,.18);box-shadow:0 16px 40px rgba(46,31,24,.45),inset 0 1px 0 rgba(255,255,255,.2)}
 .top::after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 22px rgba(255,255,255,.04),0 0 0 44px rgba(255,255,255,.03);pointer-events:none}
 .top>*{position:relative;z-index:1}
-.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-tools{display:flex;flex-direction:column;gap:8px;flex:none}.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
 .logo{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(145deg,#f7c873,#d98e2b);color:#3b2a21;box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.55)}
 .logo svg{width:28px;height:28px}
@@ -140,7 +140,7 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.2"/><rect x="13" y="3" width="8" height="8" rx="2.2" opacity=".6"/><rect x="3" y="13" width="8" height="8" rx="2.2" opacity=".6"/><rect x="13" y="13" width="8" height="8" rx="2.2"/></svg></span>
 <div class="brand-text"><h1 id="siteTitle">Portal Favoritos</h1><p class="sub">Busca, favoritos e projetos em um só lugar</p></div>
 </div>
-<button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
+<div class="top-tools"><button class="icon-btn" id="topInstall" type="button" aria-label="Instalar aplicativo" title="Instalar aplicativo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button><button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button></div>
 </div>
 <div class="actions">
 <button class="pill main" id="openHelp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17.5h.01"/></svg>Como funciona</button>
@@ -768,12 +768,27 @@ backupSay('Preferências importadas.','good')
 }
 
 let installEvent=null;
+function isStandalone(){
+try{return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}catch(e){return false}
+}
+if(!isStandalone())$('topInstall').hidden=false;
 window.addEventListener('beforeinstallprompt',e=>{
 e.preventDefault();
 installEvent=e;
 $('installBtn').hidden=false
 });
-window.addEventListener('appinstalled',()=>{installEvent=null;$('installBtn').hidden=true});
+window.addEventListener('appinstalled',()=>{installEvent=null;$('installBtn').hidden=true;$('topInstall').hidden=true});
+$('topInstall').addEventListener('click',async()=>{
+if(installEvent){
+installEvent.prompt();
+try{await installEvent.userChoice}catch(e){}
+installEvent=null;
+$('installBtn').hidden=true;
+return
+}
+const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+window.alert(ios?'Para instalar: toque em Compartilhar no Safari e depois em Adicionar à Tela de Início.':'Para instalar: abra o menu do navegador (três pontinhos) e toque em Instalar aplicativo ou Adicionar à tela inicial.')
+});
 $('installBtn').addEventListener('click',async()=>{
 if(!installEvent)return;
 installEvent.prompt();
