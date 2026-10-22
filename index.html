@@ -55,7 +55,7 @@ button,select,input{font:inherit}
 .tile.add .ico{background:transparent;border:2px dashed #8f9aad;box-shadow:none;color:#5b6472}
 .tile.add .ico svg{width:26px;height:26px}
 .editing .tile .ico{animation:wiggle .35s ease-in-out infinite alternate}
-.editing .tile.add{display:none}
+.editing .tile.add{display:none}.tile .mvrow{display:flex;gap:6px;justify-content:center}.tile .mv{width:34px;height:30px;border:1px solid rgba(217,142,43,.55);border-radius:9px;background:#fff;color:#7a4a10;font-size:15px;font-weight:700;line-height:1;cursor:pointer;padding:0}.tile .mv:disabled{opacity:.3;cursor:default}
 @keyframes wiggle{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
 @media (prefers-reduced-motion:reduce){.editing .tile .ico{animation:none}}
 .empty{margin:0;color:var(--muted);font-size:14px}
@@ -212,7 +212,7 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <ul>
 <li>Toque em Adicionar e informe o nome e o link do site.</li>
 <li>A imagem é opcional: você pode colar o link de uma imagem ou escolher uma do aparelho. Sem imagem, o portal usa o ícone do próprio site.</li>
-<li>Toque em Editar para alterar ou excluir um favorito.</li>
+<li>Toque em Editar para alterar ou excluir um favorito. No modo Editar, use as setas ◀ ▶ abaixo de cada favorito para mudar a ordem.</li>
 </ul>
 <h3>Fundo da página</h3>
 <p>Nas Configurações há quatro fundos prontos e o fundo padrão. Você também pode usar uma imagem sua, colando o link ou escolhendo um arquivo do aparelho.</p>
@@ -461,7 +461,7 @@ function renderFavs(){
 const grid=$('favGrid');
 grid.textContent='';
 grid.classList.toggle('editing',editing);
-favs.forEach(f=>{
+favs.forEach((f,idx)=>{
 const a=document.createElement('a');
 a.className='tile';
 a.href=f.url;
@@ -472,6 +472,31 @@ const s=document.createElement('span');
 s.textContent=f.nome;
 a.appendChild(s);
 a.addEventListener('click',ev=>{if(editing){ev.preventDefault();openFav(f.id)}});
+if(editing){
+const row=document.createElement('div');
+row.className='mvrow';
+[['◀',-1,'Mover para antes'],['▶',1,'Mover para depois']].forEach(([txt,dir,label])=>{
+const b=document.createElement('button');
+b.type='button';
+b.className='mv';
+b.textContent=txt;
+b.setAttribute('aria-label',label+': '+f.nome);
+b.disabled=idx+dir<0||idx+dir>=favs.length;
+b.addEventListener('click',ev=>{
+ev.preventDefault();
+ev.stopPropagation();
+const to=idx+dir;
+if(to<0||to>=favs.length)return;
+const tmp=favs[idx];
+favs[idx]=favs[to];
+favs[to]=tmp;
+saveFavs();
+renderFavs()
+});
+row.appendChild(b)
+});
+a.appendChild(row)
+}
 grid.appendChild(a)
 });
 const add=document.createElement('button');
@@ -1107,18 +1132,13 @@ const COUNTER_BASE='https://abacus.jasoncameron.dev';
 const COUNTER_NS='morchemarques-portal-favoritos';
 const COUNTER_KEY='visitas';
 async function loadCounter(){
-const today=new Date().toISOString().slice(0,10);
-const counted=lsGet('contador_dia')===today;
-const url=action=>COUNTER_BASE+'/'+action+'/'+COUNTER_NS+'/'+COUNTER_KEY;
+const url=COUNTER_BASE+'/hit/'+COUNTER_NS+'/'+COUNTER_KEY;
 try{
-let action=counted?'get':'hit';
-let r=await fetch(url(action),{cache:'no-store'});
-if(r.status===404&&action==='get'){action='hit';r=await fetch(url('hit'),{cache:'no-store'})}
+const r=await fetch(url,{cache:'no-store'});
 if(!r.ok)throw new Error('http');
 const j=await r.json();
 const v=Number(j&&j.value);
 if(!Number.isFinite(v))throw new Error('value');
-if(action==='hit')lsSet('contador_dia',today);
 $('visitCount').textContent=v.toLocaleString('pt-BR');
 $('visitLine').hidden=false
 }catch(e){$('visitLine').hidden=true}
