@@ -1161,6 +1161,12 @@ $('visitLine').hidden=false
 }
 
 
+
+function requestPersistentStorage(){
+try{
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(ok=>{if(!ok)return navigator.storage.persist()}).catch(()=>{})
+}catch(e){}
+}
 function setupShare(){
 const btn=$('shareBtn');
 if(!btn)return;
@@ -1215,7 +1221,7 @@ setupSettings();
 loadBg();
 loadShowcase();
 setupSync();
-setupFooter();setupShare();
+setupFooter();setupShare();requestPersistentStorage();
 loadCounter();
 setupUpdates()
 })();
