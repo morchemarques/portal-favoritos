@@ -16,6 +16,22 @@
       "link": "https://rotadiretagps.github.io/rotadireta-gps/",
       "imagem": "https://rotadiretagps.github.io/rotadireta-gps/icon-192.png",
       "acesso": "pago"
+    },
+    {
+      "nome": "Super Labirinto",
+      "descricao": "Jogo de labirinto com várias fases e pontuação de recorde. Jogue direto no navegador, sem instalar nada.",
+      "link": "https://morchemarques.github.io/Super-Labirinto/",
+      "acesso": "livre",
+      "destaque": false,
+      "botao": "Jogar agora"
+    },
+    {
+      "nome": "Calendário da Horta",
+      "descricao": "Planejador da horta: agende plantios, receba lembretes de rega e adubação, veja o que plantar em cada mês e faça backup dos seus dados.",
+      "link": "https://morchemarques.github.io/Calendario-da-Horta/",
+      "acesso": "livre",
+      "destaque": false,
+      "botao": "Abrir calendário"
     }
   ]
 }
