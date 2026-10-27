@@ -23,7 +23,8 @@
       "link": "https://morchemarques.github.io/Super-Labirinto/",
       "acesso": "livre",
       "destaque": false,
-      "botao": "Jogar agora"
+      "botao": "Jogar agora",
+      "imagem": "super-labirinto-icon.jpg"
     },
     {
       "nome": "Calendário da Horta",
@@ -31,7 +32,8 @@
       "link": "https://morchemarques.github.io/Calendario-da-Horta/",
       "acesso": "livre",
       "destaque": false,
-      "botao": "Abrir calendário"
+      "botao": "Abrir calendário",
+      "imagem": "calendario-horta-icon.png"
     }
   ]
 }
