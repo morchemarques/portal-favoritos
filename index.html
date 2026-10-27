@@ -964,6 +964,81 @@ $('cardsEmpty').hidden=rest.length>0;
 if(!rest.length)$('cardsEmpty').textContent='Nenhum projeto cadastrado ainda.';
 rest.forEach(p=>box.appendChild(buildCard(p,normalizeUrl(p.link))))
 }
+const KEY_ICONS='icones_auto',ICON_TTL=3*24*3600*1000;
+function readIconCache(){try{return JSON.parse(localStorage.getItem(KEY_ICONS)||'{}')||{}}catch(e){return{}}}
+function applyIconCache(list){
+if(!Array.isArray(list))return;
+const c=readIconCache();
+list.forEach(p=>{if(p&&p.iconeAuto&&p.link&&c[p.link]&&c[p.link].u)p.imagem=c[p.link].u})
+}
+async function fetchText(url){
+const ctl=new AbortController();
+const to=setTimeout(()=>ctl.abort(),5000);
+try{
+const r=await fetch(url,{signal:ctl.signal});
+if(!r.ok)throw new Error('http');
+return{text:await r.text(),url:r.url||url}
+}finally{clearTimeout(to)}
+}
+function iconSize(el){
+const m=String(el.getAttribute('sizes')||'').match(/(\d+)x(\d+)/);
+return m?Number(m[1]):0
+}
+async function findIcon(link){
+const page=await fetchText(link);
+const doc=new DOMParser().parseFromString(page.text,'text/html');
+const pick=list=>list.sort((a,b)=>iconSize(b)-iconSize(a))[0];
+const touch=pick([...doc.querySelectorAll('link[rel~="apple-touch-icon"][href]')]);
+if(touch)return new URL(touch.getAttribute('href'),page.url).href;
+const icons=[...doc.querySelectorAll('link[rel~="icon"][href]')].filter(el=>!/\.svg(\?|$)/i.test(el.getAttribute('href')));
+const ic=pick(icons);
+const man=doc.querySelector('link[rel="manifest"][href]');
+if(man){
+try{
+const murl=new URL(man.getAttribute('href'),page.url).href;
+const m=JSON.parse((await fetchText(murl)).text);
+const best=(m.icons||[]).filter(i=>i&&i.src).sort((a,b)=>(parseInt(String(b.sizes||'0'),10)||0)-(parseInt(String(a.sizes||'0'),10)||0))[0];
+if(best)return new URL(best.src,murl).href
+}catch(e){}
+}
+if(ic)return new URL(ic.getAttribute('href'),page.url).href;
+const root=new URL('./',page.url).href;
+try{
+const m=JSON.parse((await fetchText(root+'manifest.webmanifest')).text);
+const best=(m.icons||[]).filter(i=>i&&i.src).sort((x,y)=>(parseInt(String(y.sizes||'0'),10)||0)-(parseInt(String(x.sizes||'0'),10)||0))[0];
+if(best)return new URL(best.src,root+'manifest.webmanifest').href
+}catch(e){}
+for(const n of['icon-512.png','icon-192.png']){
+if(await imageLoads(root+n))return root+n
+}
+return''
+}
+function imageLoads(url){
+return new Promise(res=>{
+const im=new Image();
+const to=setTimeout(()=>res(false),4000);
+im.onload=()=>{clearTimeout(to);res(true)};
+im.onerror=()=>{clearTimeout(to);res(false)};
+im.src=url
+})
+}
+async function discoverIcons(list){
+if(!Array.isArray(list))return false;
+const c=readIconCache();
+const now=Date.now();
+let changed=false;
+await Promise.all(list.map(async p=>{
+if(!p||!p.iconeAuto||!p.link)return;
+const cur=c[p.link];
+if(cur&&now-cur.t<ICON_TTL)return;
+try{
+const u=await findIcon(p.link);
+if(u){c[p.link]={u,t:now};if(p.imagem!==u){p.imagem=u;changed=true}}
+}catch(e){}
+}));
+try{localStorage.setItem(KEY_ICONS,JSON.stringify(c))}catch(e){}
+return changed
+}
 async function loadShowcase(){
 try{
 const r=await fetch('projetos.json',{cache:'no-store'});
@@ -973,7 +1048,10 @@ if(data&&typeof data.titulo==='string'&&data.titulo.trim()){
 $('siteTitle').textContent=data.titulo.trim();
 document.title=data.titulo.trim()
 }
-renderCards(data&&data.projetos)
+const lista=data&&data.projetos;
+applyIconCache(lista);
+renderCards(lista);
+discoverIcons(lista).then(changed=>{if(changed)renderCards(lista)})
 }catch(e){
 $('cardsEmpty').hidden=false;
 $('cardsEmpty').textContent='Não foi possível carregar os projetos agora.'
