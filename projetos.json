@@ -14,7 +14,11 @@
       "nome": "RotaDireta GPS",
       "descricao": "Rotas de entrega com roteirização por IA, correção de endereço no mapa e navegação no Google Maps, Waze ou HERE WeGo.",
       "link": "https://rotadireta-gps.pages.dev/roteirizador",
-      "imagem": "https://rotadiretagps.github.io/rotadireta-gps/icon-192.png",
+      "imagem": [
+        "https://rotadireta-gps.pages.dev/icon-512.png",
+        "https://rotadireta-gps.pages.dev/icon-192.png",
+        "rotadireta-icon.png"
+      ],
       "acesso": "pago"
     },
     {
