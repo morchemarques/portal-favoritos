@@ -1079,6 +1079,7 @@ $('siteTitle').textContent=data.titulo.trim();
 document.title=data.titulo.trim()
 }
 const lista=data&&data.projetos;
+if(Array.isArray(lista))lista.forEach(p=>{if(p&&!p.imagem&&p.iconeAuto!==false)p.iconeAuto=true});
 applyIconCache(lista);
 renderCards(lista);
 discoverIcons(lista).then(changed=>{if(changed)renderCards(lista)})

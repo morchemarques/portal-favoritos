@@ -7,7 +7,7 @@
       "link": "https://campsaboaria.github.io/campsaboaria/",
       "acesso": "livre",
       "destaque": false,
-      "botao": "Acessar página de vendas",
+      "botao": "Acessar Página",
       "imagem": "campsaboaria-icon.jpg"
     },
     {
@@ -32,7 +32,7 @@
       "link": "https://morchemarques.github.io/Calendario-da-Horta/",
       "acesso": "livre",
       "destaque": false,
-      "botao": "Abrir calendário",
+      "botao": "Abrir projeto",
       "imagem": "calendario-horta-icon.png"
     }
   ]
