@@ -133,6 +133,27 @@ dialog::backdrop{background:rgba(15,23,42,.5)}
 hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 [hidden]{display:none!important}
 @media (max-width:520px){.search{grid-template-columns:1fr auto}.search select{grid-column:1 / -1;max-width:none}}
+
+/* Cabeçalho discreto e recolhível */
+.top{gap:0;padding:12px 14px}
+.top::after{opacity:.6}
+.logo{width:36px;height:36px;border-radius:11px}
+.logo svg{width:20px;height:20px}
+.brand{gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.top h1{font-size:clamp(17px,4.6vw,20px);font-weight:700;letter-spacing:-.2px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.sub{display:none;font-size:12px}
+.top.open .sub{display:block}
+.top-tools{flex-direction:row;align-items:center;gap:8px}
+.top .icon-btn{width:38px;height:38px;border-radius:11px}
+.top .icon-btn svg{width:20px;height:20px}
+#toggleMenu svg{transition:transform .25s ease}
+.top.open #toggleMenu svg{transform:rotate(180deg)}
+.actions-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.top.open .actions-wrap{grid-template-rows:1fr}
+.actions-inner{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s linear .25s}
+.top.open .actions-inner{visibility:visible;transition-delay:0s}
+.actions{padding-top:14px}
+@media (prefers-reduced-motion:reduce){.actions-wrap,.actions-inner,#toggleMenu svg{transition:none}}
 </style>
 </head>
 <body>
@@ -143,14 +164,14 @@ hr{width:100%;border:0;border-top:1px solid var(--line);margin:4px 0}
 <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.2"/><rect x="13" y="3" width="8" height="8" rx="2.2" opacity=".6"/><rect x="3" y="13" width="8" height="8" rx="2.2" opacity=".6"/><rect x="13" y="13" width="8" height="8" rx="2.2"/></svg></span>
 <div class="brand-text"><h1 id="siteTitle">Portal Favoritos</h1><p class="sub">Busca, favoritos e projetos em um só lugar</p></div>
 </div>
-<div class="top-tools"><button class="icon-btn" id="topInstall" type="button" aria-label="Instalar aplicativo" title="Instalar aplicativo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button><button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button></div>
+<div class="top-tools"><button class="icon-btn" id="toggleMenu" type="button" aria-label="Mostrar ou esconder opções" aria-expanded="false" aria-controls="topActions" title="Opções"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><button class="icon-btn" id="topInstall" type="button" aria-label="Instalar aplicativo" title="Instalar aplicativo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></button><button class="icon-btn" id="openSettings" type="button" aria-label="Configurações"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button></div>
 </div>
-<div class="actions">
+<div class="actions-wrap" id="topActions"><div class="actions-inner"><div class="actions">
 <button class="pill main" id="openHelp" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17.5h.01"/></svg>Como funciona</button>
 <a class="pill" href="https://chat.whatsapp.com/DR6neHKT1fWGXwQNA3djJ0?s=cl&amp;p=a&amp;mlu=4&amp;iam=2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 3.5A11 11 0 0 0 3.2 17.2L2 22l4.9-1.2A11 11 0 0 0 20.5 3.5Z"/><path d="M9 8.2c0 3.6 3 6.6 6.6 6.6l1.4-1.6-2.3-1.2-1 .9a4.2 4.2 0 0 1-2.4-2.4l.9-1L10.5 7.3Z"/></svg>Grupo no WhatsApp</a>
 <button class="pill main" id="shareBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Compartilhar</button>
 <a class="pill" href="mailto:morchemarques@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>E-mail</a>
-</div>
+</div></div></div>
 </header>
 
 <section class="panel featured" id="featured" hidden>
@@ -1359,6 +1380,13 @@ try{
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(ok=>{if(!ok)return navigator.storage.persist()}).catch(()=>{})
 }catch(e){}
 }
+function setupTopMenu(){
+const top=document.querySelector('header.top'),btn=$('toggleMenu'),brand=top&&top.querySelector('.brand');
+if(!top||!btn)return;
+const toggle=()=>{const on=top.classList.toggle('open');btn.setAttribute('aria-expanded',on?'true':'false')};
+btn.addEventListener('click',toggle);
+if(brand)brand.addEventListener('click',toggle)
+}
 function setupShare(){
 const btn=$('shareBtn');
 if(!btn)return;
@@ -1413,7 +1441,7 @@ setupSettings();
 loadBg();
 loadShowcase();
 setupSync();
-setupFooter();setupShare();requestPersistentStorage();
+setupFooter();setupShare();setupTopMenu();requestPersistentStorage();
 loadCounter();
 setupUpdates()
 })();
